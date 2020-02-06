@@ -3,6 +3,9 @@ import requests
 import json
 import Constants
 import tweepy
+from datetime import datetime
+import pytz
+
 
 newlyPublished = []
 newlyUpdated = []
@@ -10,6 +13,12 @@ wpToken = ""
 waitingToTweet = []
 tweetCount = 0
 
+
+def currentDateTime():
+    d_naive = datetime.now()
+    timezone = pytz.timezone("Australia/ACT")
+    d_aware = timezone.localize(d_naive).strftime('%Y-%m-%d %H:%M:%S')
+    return d_aware
 
 def datasetHeader(session_token):
 
@@ -32,7 +41,7 @@ def fetchMetabaseSessionToken():
 
 
 def fetchDatasets():
-    print("Ada Twitter Bot is fetching data from Metabase")
+    print(currentDateTime() + " Ada Twitter Bot is fetching data from Metabase")
     sessionToken = fetchMetabaseSessionToken()
     try:
         r = requests.post(Constants.API_DATASETS_QUERY_NEWPUBLICATION, headers=datasetHeader(sessionToken))
@@ -56,7 +65,8 @@ def fetchDatasets():
     except Exception as error:
         print('ERROR', error)
 
-    print("Fetch done.")
+    print(currentDateTime() + " Fetch done.")
+
 
 def createTwitterAPI():
     # authentication of consumer key and secret
@@ -80,9 +90,9 @@ def updateTwitter(content, category):
     tweet = ""
     if len(content) > 0:
         if category == "26":
-            print("Ada Twitter Bot is updating the status with Newly Published Dataset.")
+            print(currentDateTime() + " Ada Twitter Bot is updating the status with Newly Published Dataset.")
         elif category == "27":
-            print("Ada Twitter Bot is updating the status with Recently Updated Dataset.")
+            print(currentDateTime() + " Ada Twitter Bot is updating the status with Recently Updated Dataset.")
 
         for i in range(len(content)):
 
@@ -112,7 +122,7 @@ def updateTwitter(content, category):
             except Exception as error:
                 print(error)
 
-        print(str(tweetCount) + " tweets have been updated.")
+        print(currentDateTime() + " " + str(tweetCount) + " tweets have been updated.")
 
     waitingToTweet.clear()
 
@@ -157,11 +167,11 @@ def main():
     if len(newlyPublished) > 0:
         updateTwitter(newlyPublished, "26")
     else:
-        print("There is no Newly Published Dataset.")
+        print(currentDateTime() + " There is no Newly Published Dataset.")
     if len(newlyUpdated) > 0:
         updateTwitter(newlyUpdated, "27")
     else:
-        print("There is no Recently Updated Dataset")
+        print(currentDateTime() + " There is no Recently Updated Dataset")
 
 
 if __name__ == "__main__":
