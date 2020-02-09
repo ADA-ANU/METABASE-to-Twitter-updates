@@ -123,8 +123,8 @@ def updateTwitter(content, category):
                 print(error)
 
         print(currentDateTime() + " " + str(tweetCount) + " tweets have been updated.")
-
     waitingToTweet.clear()
+
 
 
 
