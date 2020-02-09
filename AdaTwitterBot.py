@@ -85,7 +85,7 @@ def createTwitterAPI():
 
 
 def updateTwitter(content, category):
-    global tweetCount
+    global tweetCount, waitingToTweet
     api = createTwitterAPI()
     tweet = ""
     if len(content) > 0:
@@ -123,7 +123,7 @@ def updateTwitter(content, category):
                 print(error)
 
         print(currentDateTime() + " " + str(tweetCount) + " tweets have been updated.")
-    waitingToTweet.clear()
+    waitingToTweet = []
 
 
 
