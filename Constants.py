@@ -65,11 +65,7 @@ API_DATAVERSES_PUBLISHDATASET_HEADER = {
 dateDiff = 14
 
 consumer_key = os.getenv("CONSUMER_KEY")
-print(consumer_key)
 consumer_secret = os.getenv("CONSUMER_SECRET")
-print(consumer_secret)
 access_token = os.getenv("ACCESS_TOKEN")
-print(access_token)
 access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
-print(access_token_secret)
 
