@@ -97,19 +97,19 @@ def updateTwitter(content, category):
         for i in range(len(content)):
 
             temp = tweetCompositionSimple(content[i], i, category)
-
-            if len(temp) > 479:
-                tempT = temp[0:479] + "..."
-                waitingToTweet.append(tempT)
-            elif len(tweet) > 0 and len(tweet + tweetCompositionSimple(content[i], i, category)) > 479:
-                waitingToTweet.append(tweet)
-                tweet = tweetCompositionSimple(content[i], i, category)
-                if i == len(content) - 1:
-                    waitingToTweet.append(tweet)
-            else:
-                tweet += tweetCompositionSimple(content[i], i, category)
-                if i == len(content) - 1:
-                    waitingToTweet.append(tweet)
+            waitingToTweet.append(temp)
+            # if len(temp) > 400:
+            #     tempT = temp[0:400] + "..."
+            #     waitingToTweet.append(tempT)
+            # elif len(tweet) > 0 and len(tweet + tweetCompositionSimple(content[i], i, category)) > 400:
+            #     waitingToTweet.append(tweet)
+            #     tweet = tweetCompositionSimple(content[i], i, category)
+            #     if i == len(content) - 1:
+            #         waitingToTweet.append(tweet)
+            # else:
+            #     tweet += tweetCompositionSimple(content[i], i, category)
+            #     if i == len(content) - 1:
+            #         waitingToTweet.append(tweet)
 
     # update the status
 
@@ -127,10 +127,10 @@ def updateTwitter(content, category):
     waitingToTweet = []
 
 
-
-
 def tweetCompositionSimple(content, num, category):
     title = content['dataset_title']
+    if len(title) > 280:
+        title = title[0:280] + " ..."
     description = content['dataset_description']
     url = content['URL']
     doi = content['DOI']
@@ -138,27 +138,21 @@ def tweetCompositionSimple(content, num, category):
     if category == "27":
         publicationDate = content['publication date']
         version = str(content['versionnumber']) + "." + str(content['minorversionnumber'])
-        if num == 0:
-            tweet = "Recently updated datasets on our Dataverse: " + "\r\n" \
-                + "\r\n" \
-                + str(num+1) + ". " + title + " (" + doi + ") " + "V" + version + "\r\n" \
-                + url + "\r\n"
-        else:
-            tweet = str(num + 1) + ". " + title + " (" + doi + ") " + "V" + version + "\r\n" \
-                + url + "\r\n"
+
+        tweet = "Updated datasets on our Dataverse: " + "\r\n" \
+            + "\r\n" \
+            + title + " (" + doi + ") " + "V" + version + "\r\n" \
+            + url + "\r\n"
+
 
 
     elif category == "26":
         publicationDate = content['publish date']
-        if num == 0:
-            tweet = "Newly published datasets on our Dataverse: " + "\r\n" \
-                + "\r\n" \
-                + str(num + 1) + ". " + title + " (" + doi + ")" + "\r\n" \
-                + url + "\r\n"
 
-        else:
-            tweet = str(num + 1) + ". " + title + " (" + doi + ")" + "\r\n" \
-                + url + "\r\n" \
+        tweet = "New datasets on our Dataverse: " + "\r\n" \
+            + "\r\n" \
+            + title + " (" + doi + ")" + "\r\n" \
+            + url + "\r\n"
 
     return tweet
 
