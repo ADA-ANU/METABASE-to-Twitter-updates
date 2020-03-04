@@ -139,7 +139,7 @@ def tweetCompositionSimple(content, num, category):
         publicationDate = content['publication date']
         version = str(content['versionnumber']) + "." + str(content['minorversionnumber'])
 
-        tweet = "Updated datasets on our Dataverse: " + "\r\n" \
+        tweet = "Updated dataset on our Dataverse: " + "\r\n" \
             + "\r\n" \
             + title + " (" + doi + ") " + "V" + version + "\r\n" \
             + url + "\r\n"
@@ -149,7 +149,7 @@ def tweetCompositionSimple(content, num, category):
     elif category == "26":
         publicationDate = content['publish date']
 
-        tweet = "New datasets on our Dataverse: " + "\r\n" \
+        tweet = "New dataset on our Dataverse: " + "\r\n" \
             + "\r\n" \
             + title + " (" + doi + ")" + "\r\n" \
             + url + "\r\n"
