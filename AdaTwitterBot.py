@@ -141,7 +141,7 @@ def tweetCompositionSimple(content, num, category):
 
         tweet = "Updated dataset on our Dataverse: " + "\r\n" \
             + "\r\n" \
-            + title + " (" + doi + ") " + "V" + version + "\r\n" \
+            + title + " V" + version + "\r\n" \
             + url + "\r\n"
 
 
@@ -151,7 +151,7 @@ def tweetCompositionSimple(content, num, category):
 
         tweet = "New dataset on our Dataverse: " + "\r\n" \
             + "\r\n" \
-            + title + " (" + doi + ")" + "\r\n" \
+            + title + "\r\n" \
             + url + "\r\n"
 
     return tweet
