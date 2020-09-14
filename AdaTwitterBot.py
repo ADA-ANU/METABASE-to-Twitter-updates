@@ -12,6 +12,8 @@ newlyUpdated = []
 wpToken = ""
 waitingToTweet = []
 tweetCount = 0
+newDS_Sorted = {}
+updatedDS_Sorted = {}
 
 
 def currentDateTime():
@@ -43,27 +45,41 @@ def fetchMetabaseSessionToken():
 def fetchDatasets():
     print(currentDateTime() + " Ada Twitter Bot is fetching data from Metabase")
     sessionToken = fetchMetabaseSessionToken()
+    # print(sessionToken, datasetHeader(sessionToken))
     try:
         r = requests.post(Constants.API_DATASETS_QUERY_NEWPUBLICATION, headers=datasetHeader(sessionToken))
-        if r.status_code == 200:
+        if 200 <= r.status_code <= 299:
             res = json.loads(r.text)
 
             if len(res) > 0:
                 for i in res:
-                    newlyPublished.append(i)
+                    if i["owner_id"] in newDS_Sorted:
+                        newDS_Sorted[i["owner_id"]].append(i)
+                    else:
+                        newDS_Sorted[i["owner_id"]] = [i]
+
+            print("keys: ", newDS_Sorted.keys(), len(newDS_Sorted.keys()))
+            # print("15490: ", len(newDS_Sorted[15409]))
+            # newlyPublished.append(i)
     except Exception as error:
-        print('ERROR', error)
+        print('ERROR 56', error)
 
     try:
         r = requests.post(Constants.API_DATASETS_QUERY_NEWPUPDATE, headers=datasetHeader(sessionToken))
-        if r.status_code == 200:
+        if 200 <= r.status_code <= 299:
             res = json.loads(r.text)
 
             if len(res) > 0:
                 for i in res:
-                    newlyUpdated.append(i)
+                    if i["owner_id"] in updatedDS_Sorted:
+                        updatedDS_Sorted[i["owner_id"]].append(i)
+                    else:
+                        updatedDS_Sorted[i["owner_id"]] = [i]
+
+                    # newlyUpdated.append(i)
+            print("keys: ", updatedDS_Sorted.keys(), len(updatedDS_Sorted.keys()))
     except Exception as error:
-        print('ERROR', error)
+        print('ERROR 67', error)
 
     print(currentDateTime() + " Fetch done.")
 
@@ -79,7 +95,7 @@ def createTwitterAPI():
     try:
         api.verify_credentials()
     except:
-        print("Error during authentication")
+        print("Error found in authentication")
 
     return api
 
@@ -94,10 +110,26 @@ def updateTwitter(content, category):
         elif category == "27":
             print(currentDateTime() + " Ada Twitter Bot is updating the status with Recently Updated Dataset.")
 
-        for i in range(len(content)):
+        for i in content.keys():
+            if len(content[i]) >= 5:
+                print("more than 5 values: ", i)
+                temp = tweetCompositionBulk(content[i], category)
+                waitingToTweet.append(temp)
 
-            temp = tweetCompositionSimple(content[i], i, category)
-            waitingToTweet.append(temp)
+            else:
+                print("less than 5 values: ", i)
+                for ele in range(len(content[i])):
+                    # print(content[i])
+                    temp = tweetCompositionSimple(content[i][ele], ele, category)
+                    waitingToTweet.append(temp)
+
+        # print(waitingToTweet)
+
+        # for i in range(len(content)):
+        #     print(content[i])
+            # temp = tweetCompositionSimple(content[i], i, category)
+            # waitingToTweet.append(temp)
+
             # if len(temp) > 400:
             #     tempT = temp[0:400] + "..."
             #     waitingToTweet.append(tempT)
@@ -114,6 +146,7 @@ def updateTwitter(content, category):
     # update the status
 
     if len(waitingToTweet) > 0:
+        waitingToTweet = waitingToTweet[0:10]
         for i in waitingToTweet:
 
             try:
@@ -128,6 +161,7 @@ def updateTwitter(content, category):
 
 
 def tweetCompositionSimple(content, num, category):
+    print(content)
     title = content['dataset_title']
     if len(title) > 280:
         title = title[0:280] + " ..."
@@ -157,14 +191,45 @@ def tweetCompositionSimple(content, num, category):
     return tweet
 
 
+def tweetCompositionBulk(content, category):
+    dvTitle = content[0]['owner_name']
+    if len(dvTitle) > 280:
+        dvTitle = dvTitle[0:280] + " ..."
+    # description = content['dataset_description']
+    owner_url = content[0]['owner_URL']
+    # doi = content['DOI']
+
+    if category == "27":
+        # publicationDate = content['publication date']
+        # version = str(content['versionnumber']) + "." + str(content['minorversionnumber'])
+
+        tweet = str(len(content)) + " datasets updated on our Dataverse: " + "\r\n" \
+            + "\r\n" \
+            + dvTitle + "\r\n" \
+            + owner_url + "\r\n"
+
+
+
+    elif category == "26":
+        # publicationDate = content['publish date']
+
+        tweet = str(len(content)) + " new datasets published on our Dataverse: " + "\r\n" \
+            + "\r\n" \
+            + dvTitle + "\r\n" \
+            + owner_url + "\r\n"
+
+    return tweet
+
+
 def main():
     fetchDatasets()
-    if len(newlyPublished) > 0:
-        updateTwitter(newlyPublished, "26")
+    if len(newDS_Sorted.values()) > 0:
+        # print('skipped')
+        updateTwitter(newDS_Sorted, "26")
     else:
         print(currentDateTime() + " There is no Newly Published Dataset.")
-    if len(newlyUpdated) > 0:
-        updateTwitter(newlyUpdated, "27")
+    if len(updatedDS_Sorted.values()) > 0:
+        updateTwitter(updatedDS_Sorted, "27")
     else:
         print(currentDateTime() + " There is no Recently Updated Dataset")
 

@@ -2,7 +2,8 @@ import dotenv
 import os
 dotenv.load_dotenv()
 
-API_METABASE_AUTHENTICATION_ENDPOINT = "https://dataverse-dev.ada.edu.au/metabase/api/session"
+# API_METABASE_AUTHENTICATION_ENDPOINT = "https://dataverse-dev.ada.edu.au/metabase/api/session"
+API_METABASE_AUTHENTICATION_ENDPOINT = "https://reporting.ada.edu.au/api/session"
 
 API_WP_AUTHENTICATION_ENDPOINT = "http://sw-dev.ada.edu.au:8085/wp-json/aam/v2/authenticate"
 
@@ -14,9 +15,11 @@ API_WP_UPDATEPOSTS = "http://sw-dev.ada.edu.au:8085/wp-json/wp/v2/posts/"
 
 API_WP_VALIDATE = "http://sw-dev.ada.edu.au:8085/wp-json/aam/v1/validate-jwt"
 
-API_DATASETS_QUERY_NEWPUBLICATION = "https://dataverse-dev.ada.edu.au/metabase/api/card/396/query/json"
+# API_DATASETS_QUERY_NEWPUBLICATION = "https://dataverse-dev.ada.edu.au/metabase/api/card/396/query/json"
+API_DATASETS_QUERY_NEWPUBLICATION = "https://reporting.ada.edu.au/api/card/471/query/json"
 
-API_DATASETS_QUERY_NEWPUPDATE = "https://dataverse-dev.ada.edu.au/metabase/api/card/397/query/json"
+# API_DATASETS_QUERY_NEWPUPDATE = "https://dataverse-dev.ada.edu.au/metabase/api/card/397/query/json"
+API_DATASETS_QUERY_NEWPUPDATE = "https://reporting.ada.edu.au/api/card/472/query/json"
 
 API_WP_CREATEPOSTS = "http://sw-dev.ada.edu.au:8085/wp-json/wp/v2/posts"
 
