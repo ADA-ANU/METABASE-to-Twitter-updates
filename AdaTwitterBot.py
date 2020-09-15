@@ -112,12 +112,12 @@ def updateTwitter(content, category):
 
         for i in content.keys():
             if len(content[i]) >= 5:
-                print("more than 5 values: ", i)
+                print("more than 5 datasets: ", i)
                 temp = tweetCompositionBulk(content[i], category)
                 waitingToTweet.append(temp)
 
             else:
-                print("less than 5 values: ", i)
+                print("less than 5 datasets: ", i)
                 for ele in range(len(content[i])):
                     # print(content[i])
                     temp = tweetCompositionSimple(content[i][ele], ele, category)
