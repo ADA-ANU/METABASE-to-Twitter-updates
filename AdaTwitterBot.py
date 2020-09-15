@@ -161,7 +161,7 @@ def updateTwitter(content, category):
 
 
 def tweetCompositionSimple(content, num, category):
-    print(content)
+    # print(content)
     title = content['dataset_title']
     if len(title) > 280:
         title = title[0:280] + " ..."
